@@ -50,3 +50,7 @@ T-Clock*.7z
 _*
 Static/
 *.[0-9].*
+
+# Ignores from here on are added for the Windows 11 update and conversion to cmake.
+out/
+.vs/
