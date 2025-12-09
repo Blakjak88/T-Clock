@@ -4,7 +4,6 @@
 // Modified by Stoic Joker: Wednesday, March 3 2010 - 7:17:33
 #include "tclock.h"
 #include <time.h>
-#include "../common/version.h"
 static void OnInit(HWND hDlg);
 static void OnApply(HWND hDlg);
 static void OnLinkClicked(HWND hDlg, UINT id);
@@ -36,8 +35,9 @@ INT_PTR CALLBACK Page_About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_INITDIALOG:
 		OnInit(hDlg);
 #		ifdef LOGGING
-		CheckDlgButton(hDlg, IDC_LOGGING, (api.GetInt(L"",L"NoLog",0) != VER_REVISION));
-#		endif // LOGGING
+		//CheckDlgButton(hDlg, IDC_LOGGING, (api.GetInt(L"",L"NoLog",0) != VER_REVISION)); 
+    CheckDlgButton(hDlg, IDC_LOGGING, (api.GetInt(L"", L"NoLog", 0) != 0));  // TODO: Fix versioning
+#endif // LOGGING
 		return TRUE;
 	case WM_DESTROY:{
 		int controlid;
@@ -106,8 +106,9 @@ INT_PTR CALLBACK Page_About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 #		ifdef LOGGING
 		else if(id == IDC_LOGGING) {
 			if(!IsDlgButtonChecked(hDlg,id))
-				api.SetInt(L"", L"NoLog", VER_REVISION);
-			else
+				//api.SetInt(L"", L"NoLog", VER_REVISION);
+        api.SetInt(L"", L"NoLog", 0);  // TODO: Fix versioning.
+      else
 				api.DelValue(L"", L"NoLog");
 			SendMessage(g_hwndClock, CLOCKM_LOGGING_CLEANUP, 0, 0);
 			DebugLogFree();

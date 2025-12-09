@@ -522,8 +522,9 @@ void InitClock(HWND hwnd)   //--------------------------------------------------
 {
 	gs_tray = GetParent(hwnd);
 	gs_taskbar = GetParent(gs_tray);
-	LoadLibrary(L"T-Clock" ARCH_SUFFIX); // self-reference
-	SetupClockAPI(CLOCK_API, NULL); // initialize API
+	//LoadLibrary(L"T-Clock" ARCH_SUFFIX); // self-reference
+  LoadLibrary(L"T-Clock"); // Removed reference to ARCH_SUFFIX. No meaning in Windows 11.
+  SetupClockAPI(CLOCK_API, NULL);      // initialize API
 	GetClientRect(hwnd, &m_rcClock); // use original clock size until we've loaded our settings
 	m_clock_base_width = m_rcClock.right;
 	m_clock_base_height = m_rcClock.bottom;

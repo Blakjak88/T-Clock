@@ -31,34 +31,37 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-#set(Python3_EXECUTABLE "D:/Program Files/Python/Python312/python.exe")
-set(CMAKE_Fortran_COMPILER "D:/Program Files/Intel/compiler/latest/windows/bin/ifx.exe")
-set(FC "D:/Program Files/Intel/compiler/latest/windows/bin/ifx.exe")
-
 if (MSVC)
-  add_definitions(-D_UNICODE -DUNICODE)
-  add_compile_options(/std:c++latest)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE INTERNAL "" FORCE)
 endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE})
 
-find_package(Git QUIET)
-if (EXISTS "${PROJECT_SOURCE_DIR}/.git")
-  option(GIT_SUBMODULE "Check submodules during build" ON)
-  if (GIT_SUBMODULE)
-    message(STATUS "Submodule update")
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    RESULT_VARIABLE GIT_SUBMOD_RESULT)
-    if (NOT GIT_SUBMOD_RESULT EQUAL "0")
-      message(FATAL_ERROR "git submodule update --init --recusrsive failed with ${}, please checkout submodules.")
-    endif()
-  endif()
-endif()
-
 # Ensure static libraries are used
 set(BUILD_SHARED_LIBS OFF)  # Prefer static libraries over shared one
 
-# Include subdirectories
-add_subdirectory("src")
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# Define the installation directory
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/bin/T-Clock")  # Install to a directory named "T-Clock" inside the build directory
+
+add_compile_definitions(
+  _WIN32_WINNT=0x0A00
+  WINVER=0x0A00
+  UNICODE
+  LOGGING
+)
+
+# Add the src subdirectory
+add_subdirectory(src)
+
+# Install the executables and DLL
+install(TARGETS Clock DESTINATION .)
+install(TARGETS common DESTINATION .)
+install(TARGETS Options DESTINATION misc)
+install(TARGETS T-Clock DESTINATION misc)
+install(TARGETS XPCalendar DESTINATION misc)
+
+# Install the common library
+install(TARGETS common DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

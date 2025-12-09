@@ -1,5 +1,9 @@
 #ifndef TCLOCK_UTL_H
 #define TCLOCK_UTL_H
+
+#include <commctrl.h>
+#include <time.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -127,7 +131,6 @@ void DebugLog(int indent, const char* format, ...);
  * \brief cleanup function to \c DebugLog() that closes file pointers \sa DebugLog() */
 void DebugLogFree();
 
-#include "utl_logging.h"
 #ifndef LOGGING
 #	define DebugLog(indent,format,...) /**< nop; RELEASE (LOGGING not defined) */
 #	define DebugLogFree() /**< nop; RELEASE (LOGGING not defined) */

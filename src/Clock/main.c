@@ -7,13 +7,13 @@
 #include <wtsapi32.h>
 #include <shlobj.h>//SHGetFolderPath
 #include <time.h>
+
 #ifdef _MSC_VER
 #	include <direct.h>
 #	define chdir _chdir
 #else
 #	include <unistd.h> // chdir
 #endif
-#include "../common/version.h"
 
 HINSTANCE g_instance;
 TClockAPI api;
@@ -67,7 +67,8 @@ extern char g_bPlayingNonstop;
 
 wchar_t* GetClockExe(wchar_t out[MAX_PATH]) {
 	memcpy(out, api.root, api.root_size);
-	add_title(out, L"Clock" ARCH_SUFFIX L".exe");
+	//add_title(out, L"Clock" ARCH_SUFFIX L".exe");
+  add_title(out, L"Clock.exe"); // Removed reference to ARCH_SUFFIX. No meaning in Windows 11.
 	return out;
 }
 //=================================================================
@@ -265,12 +266,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, wchar_t* lpCmd
 	(void)nShowCmd;
 	
 	g_instance = hInstance;
-	updated = LoadClockAPI(L"misc/T-Clock" ARCH_SUFFIX, &api);
-	if(updated) {
+	//updated = LoadClockAPI(L"misc/T-Clock" ARCH_SUFFIX, &api);
+  updated = LoadClockAPI(L"T-Clock", &api); // Removed reference to ARCH_SUFFIX. No meaning in Windows 11.
+  if (updated)
+  {
 		wchar_t title[16];
 		swprintf(title, _countof(title), FMT("API error (%i)"), updated);
-		MessageBox(NULL, L"Error loading: T-Clock" ARCH_SUFFIX L".dll", title, (MB_OK | MB_ICONERROR | MB_SETFOREGROUND));
-		return 2;
+		//MessageBox(NULL, L"Error loading: T-Clock" ARCH_SUFFIX L".dll", title, (MB_OK | MB_ICONERROR | MB_SETFOREGROUND));
+    MessageBox(NULL, L"Error loading: T-Clock.dll", title, (MB_OK | MB_ICONERROR | MB_SETFOREGROUND)); // Removed reference to ARCH_SUFFIX. No meaning in Windows 11.
+    return 2;
 	}
 	
 	// Make sure we're running Windows 2000 and above

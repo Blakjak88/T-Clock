@@ -1,4 +1,3 @@
-#include "../common/version.h"
 #include "tclock.h"
 #include <time.h>
 #include <stdio.h>
@@ -19,8 +18,10 @@ static void AlarmGetMSG(dlgmsg_t* msg);
  * \return update interval
  * \sa VER_TIMESTAMP */
 static int GetUpdateInterval(time_t time) {
-	time_t diff = (time - VER_TIMESTAMP);
-	if(diff < 90*24*3600) {
+	//time_t diff = (time - VER_TIMESTAMP);
+  time_t diff = (time - 0);  // TODO: Fix versioning.
+  if (diff < 90 * 24 * 3600)
+  {
 		if(diff < 21*24*3600) {
 			if(diff < 7*24*3600) {
 				if(diff < 24*3600) {
